@@ -10,7 +10,7 @@ module Valera
 
       def get_all
         keys = client.keys
-        values = client.mget(keys)
+        values = keys.any? ? client.mget(keys) : {}
         result = {}
         keys.each.with_index do |key, i|
           result[key] = values[i]
