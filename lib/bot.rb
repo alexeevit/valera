@@ -118,6 +118,7 @@ class Bot
         case message.text
         when '/dump'
           bot.api.send_message(chat_id: message.chat.id, text: chain.get_all.to_json)
+        when nil
         else
           builder.add(message.text)
         end
