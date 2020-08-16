@@ -40,4 +40,4 @@ append "log", "tmp"
 # set :ssh_options, verify_host_key: :secure
 
 set :bot_systemctl_service_name, 'valera_bot'
-after 'deploy:publishlihg', 'bot:restart'
+after 'deploy:publishing', 'bot:restart'
