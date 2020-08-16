@@ -53,7 +53,5 @@ require 'bot'
 
 options[:telegram_token] = ENV['TELEGRAM_API_TOKEN']
 options[:redis_url] = ENV['REDIS_URL']
-options[:pidfile] ||= 'tmp/valera.pid'
-options[:logfile] ||= 'log/valera.log'
 
 Bot.new(options).run!
