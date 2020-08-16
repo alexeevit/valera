@@ -1,0 +1,23 @@
+# /etc/systemd/system/valera.service
+
+[Unit]
+Description=valera chatty bot
+After=syslog.target network.target
+
+[Service]
+Type=simple
+Environment=RAILS_ENV=staging
+WorkingDirectory=/var/www/valera/current/
+ExecStart=/var/www/valera/current/bin/bot -p /var/run/valera.pid -l /var/log/valera.log
+ExecStop=/bin/kill -TERM $MAINPID
+User=www
+Group=www
+UMask=0002
+MemoryHigh=2G
+MemoryMax=3G
+MemoryAccounting=true
+RestartSec=1
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
