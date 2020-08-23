@@ -7,11 +7,11 @@ module Valera
     private
 
     def is_word?(word)
-      word.match?(/[a-zA-Zа-яА-Я0-9]/)
+      word.match?(/[a-zA-Zа-яА-Я0-9-%]/)
     end
 
     def prepare_word(word)
-      word.strip.gsub(/[\.,"\?\!;:]/,'')
+      word.strip.gsub(/[\.,'"\?\!;:*]/,'')
     end
   end
 end

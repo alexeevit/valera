@@ -1,5 +1,4 @@
-require 'spec_helper'
-require './lib/valera/chain'
+require 'valera/chain'
 
 describe Valera::Chain do
   subject { described_class.new }
