@@ -18,7 +18,7 @@ Ok, nevermind. Here's my growth plan:
 
 ### Step 1. Tests plan
 - [x] Chain
-- [ ] Parser
+- [x] Parser
 - [ ] Chain builder
 
 ### Step 2. Generator
