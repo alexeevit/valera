@@ -1,7 +1,9 @@
 require 'valera/chain'
+require 'valera/adapters/memory'
 
 describe Valera::Chain do
-  subject { described_class.new }
+  subject { described_class.new(adapter) }
+  let(:adapter) { Valera::Adapters::Memory.new }
 
   describe '#get' do
     before { subject.add(prev_word, next_word) }
@@ -12,8 +14,8 @@ describe Valera::Chain do
     it 'returns all transitions for the word' do
       expect(subject.get(prev_word)).to eq({
         next_word => {
-          transitions: 1,
-          frequency: 100,
+          'transitions' => 1,
+          'frequency' => 100,
         }
       })
     end
@@ -32,8 +34,8 @@ describe Valera::Chain do
     context 'when prev_word not present' do
       it 'returns new transition' do
         expect(subject.add(prev_word, next_word)).to eq({
-          transitions: 1,
-          frequency: 100,
+          'transitions' => 1,
+          'frequency' => 100,
         })
       end
 
@@ -41,8 +43,8 @@ describe Valera::Chain do
         subject.add(prev_word, next_word)
         expect(subject.get(prev_word)).to eq({
           next_word => {
-            transitions: 1,
-            frequency: 100,
+            'transitions' => 1,
+            'frequency' => 100,
           }
         })
       end
@@ -54,8 +56,8 @@ describe Valera::Chain do
       it 'recalculates transitions' do
         expect(subject.get(prev_word)).to eq({
           'c' => {
-            transitions: 1,
-            frequency: 100,
+            'transitions' => 1,
+            'frequency' => 100,
           }
         })
 
@@ -63,12 +65,12 @@ describe Valera::Chain do
 
         expect(subject.get(prev_word)).to eq({
           'c' => {
-            transitions: 1,
-            frequency: 50,
+            'transitions' => 1,
+            'frequency' => 50,
           },
           next_word => {
-            transitions: 1,
-            frequency: 50,
+            'transitions' => 1,
+            'frequency' => 50,
           }
         })
       end
@@ -78,17 +80,17 @@ describe Valera::Chain do
       before { subject.add(prev_word, next_word) }
 
       it 'increments transition' do
-        expect(subject.get(prev_word).dig(next_word, :transitions)).to eq(1)
+        expect(subject.get(prev_word).dig(next_word, 'transitions')).to eq(1)
         subject.add(prev_word, next_word)
-        expect(subject.get(prev_word).dig(next_word, :transitions)).to eq(2)
+        expect(subject.get(prev_word).dig(next_word, 'transitions')).to eq(2)
       end
     end
 
     context 'when transitions count passed' do
       it 'increments transition by n' do
-        expect(subject.get(prev_word).dig(next_word, :transitions)).to be_nil
+        expect(subject.get(prev_word).dig(next_word, 'transitions')).to be_nil
         subject.add(prev_word, next_word, 2)
-        expect(subject.get(prev_word).dig(next_word, :transitions)).to eq(2)
+        expect(subject.get(prev_word).dig(next_word, 'transitions')).to eq(2)
       end
     end
   end
