@@ -13,7 +13,7 @@ module Valera
         values = keys.any? ? client.mget(keys) : {}
         result = {}
         keys.each.with_index do |key, i|
-          result[key] = values[i]
+          result[key] = JSON.parse(values[i])
         end
         result
       end
