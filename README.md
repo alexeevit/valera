@@ -19,7 +19,10 @@ Ok, nevermind. Here's my growth plan:
 ### Step 1. Tests plan
 - [x] Chain
 - [x] Parser
-- [ ] Chain builder
+- [x] Chain builder
+
+### Step 1.5. Purge data
+- [ ] Add a method to the interface to purge the chain
 
 ### Step 2. Generator
 - [ ] Generator specs
