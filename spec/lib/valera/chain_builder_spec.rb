@@ -28,4 +28,14 @@ describe Valera::ChainBuilder do
       })
     end
   end
+
+  describe '#stats' do
+    before { subject.add('Hello world! My name is Valera!') }
+    it 'returns hash with proper data' do
+      expect(subject.stats).to eq({
+        pairs_count: 5,
+        transitions_count: 5,
+      })
+    end
+  end
 end

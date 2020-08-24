@@ -14,6 +14,14 @@ module Valera
       end
     end
 
+    def stats
+      words = chain.get_all
+      {
+        pairs_count: words.values.sum { |transitions| transitions.keys.count },
+        transitions_count: words.values.sum { |transitions| transitions.values.sum { |transition| transition['transitions'] } },
+      }
+    end
+
     private
 
     attr_reader :chain, :parser

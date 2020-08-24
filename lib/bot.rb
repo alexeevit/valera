@@ -115,18 +115,26 @@ class Bot
   def run_telegram_bot
     Telegram::Bot::Client.run(options[:telegram_token]) do |bot|
       bot.listen do |message|
-        case message.text
-        when '/purge'
-          if chain.purge
-            bot.api.send_message(chat_id: message.chat.id, text: 'Done')
+        begin
+          case message.text
+          when '/stats'
+            stats = builder.stats
+            stats_text = "Количество пар: #{stats[:pairs_count]}\nКоличество переходов: #{stats[:transitions_count]}"
+            bot.api.send_message(chat_id: message.chat.id, text: stats_text)
+          when '/purge'
+            if chain.purge
+              bot.api.send_message(chat_id: message.chat.id, text: 'Done')
+            else
+              bot.api.send_message(chat_id: message.chat.id, text: 'Something went wrong')
+            end
+          when '/dump'
+            bot.api.send_message(chat_id: message.chat.id, text: chain.get_all.to_json.slice(0, 4096))
+          when nil
           else
-            bot.api.send_message(chat_id: message.chat.id, text: 'Something went wrong')
+            builder.add(message.text)
           end
-        when '/dump'
-          bot.api.send_message(chat_id: message.chat.id, text: chain.get_all.to_json.slice(0, 4096))
-        when nil
-        else
-          builder.add(message.text)
+        rescue
+          bot.api.send_message(chat_id: message.chat.id, text: 'Something wrong happend')
         end
       end
     end
