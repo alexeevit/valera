@@ -133,8 +133,8 @@ class Bot
           else
             builder.add(message.text)
           end
-        rescue
-          bot.api.send_message(chat_id: message.chat.id, text: 'Something wrong happend')
+        rescue => e
+          bot.api.send_message(chat_id: message.chat.id, text: "Something wrong happened: #{e.class}: #{e.message}")
         end
       end
     end
