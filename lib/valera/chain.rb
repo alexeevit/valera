@@ -26,6 +26,10 @@ module Valera
       new_data[next_word]
     end
 
+    def purge
+      adapter.purge
+    end
+
     private
 
     attr_reader :hash, :adapter

@@ -116,6 +116,12 @@ class Bot
     Telegram::Bot::Client.run(options[:telegram_token]) do |bot|
       bot.listen do |message|
         case message.text
+        when '/purge'
+          if chain.purge
+            bot.api.send_message(chat_id: message.chat.id, text: 'Done')
+          else
+            bot.api.send_message(chat_id: message.chat.id, text: 'Something went wrong')
+          end
         when '/dump'
           bot.api.send_message(chat_id: message.chat.id, text: chain.get_all.to_json.slice(0, 4096))
         when nil

@@ -94,4 +94,11 @@ describe Valera::Chain do
       end
     end
   end
+
+  describe '#purge' do
+    it 'invokes adapters purge' do
+      expect(adapter).to receive(:purge).and_call_original
+      subject.purge
+    end
+  end
 end

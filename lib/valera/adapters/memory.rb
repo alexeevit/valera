@@ -17,6 +17,11 @@ module Valera
         data[prev_word] = matrix
       end
 
+      def purge
+        @data = {}
+        true
+      end
+
       private
 
       attr_reader :data

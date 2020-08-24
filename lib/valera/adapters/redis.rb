@@ -28,6 +28,10 @@ module Valera
         client.set(prev_word, matrix.to_json)
       end
 
+      def purge
+        client.flushall == "OK"
+      end
+
       private
 
       attr_reader :client
