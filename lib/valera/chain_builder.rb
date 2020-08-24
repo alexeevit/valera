@@ -9,7 +9,7 @@ module Valera
       words = parser.parse(text)
       previous = nil
       words.each do |word|
-        chain.add(word, previous) if previous
+        chain.add(previous, word) if previous
         previous = word
       end
     end
