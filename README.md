@@ -23,7 +23,7 @@ Ok, nevermind. Here's my growth plan:
 - [x] Chain builder
 
 ### Step 1.5. Purge data
-- [ ] Add a method to the interface to purge the chain
+- [x] Add a method to the interface to purge the chain
 
 ### Step 2. Generator
 - [ ] Generator specs
