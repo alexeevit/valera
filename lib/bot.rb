@@ -118,7 +118,7 @@ class Bot
         begin
           case message.text
           when /хуйня/i
-            bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.id, text: 'А может это ты хуйня?')
+            bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: 'А может это ты хуйня?')
           when '/stats'
             stats = builder.stats
             stats_text = "Количество пар: #{stats[:pairs_count]}\nКоличество переходов: #{stats[:transitions_count]}"
