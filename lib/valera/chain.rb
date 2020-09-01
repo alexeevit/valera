@@ -12,6 +12,7 @@ module Valera
       adapter.get_random_key
     end
 
+    # .has? WORKS BAD
     def has?(word)
       !!adapter.get(word)
     end
