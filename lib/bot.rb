@@ -119,7 +119,7 @@ class Bot
           when /хуйня/i
             bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: 'А может это ты хуйня?')
           when '/generate'
-            sentence_size = rand(50) + 10
+            sentence_size = rand(30) + 10
             generated_text = generator.get(sentence_size)
             bot.api.send_message(chat_id: message.chat.id, text: generated_text)
           when '/stats'
