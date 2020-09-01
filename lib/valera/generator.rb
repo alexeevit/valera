@@ -12,8 +12,7 @@ module Valera
       next_word = first_word
 
       (words_count - 1).times do |i|
-        next_word = chain.random unless chain.has?(next_word)
-        next_node = chain.get(next_word)
+        next_node = chain.get(next_word) || chain.get(chain.random)
         rand_index = rand(100)
         progressive_frequency = 0
         next_word, _ = next_node.find do |word, node|
