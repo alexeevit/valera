@@ -8,6 +8,14 @@ module Valera
       adapter.get_all
     end
 
+    def random
+      adapter.get_random_key
+    end
+
+    def has?(word)
+      !!adapter.get(word)
+    end
+
     def get(prev_word)
       return unless prev_word
       prev_word = String(prev_word)

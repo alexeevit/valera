@@ -32,6 +32,10 @@ module Valera
         client.flushall == "OK"
       end
 
+      def get_random_key
+        client.randomkey
+      end
+
       private
 
       attr_reader :client

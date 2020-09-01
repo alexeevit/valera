@@ -101,4 +101,26 @@ describe Valera::Chain do
       subject.purge
     end
   end
+
+  describe '#has?' do
+    before { subject.add(prev_word, next_word) }
+
+    let(:prev_word) { 'a' }
+    let(:next_word) { 'b' }
+
+    it 'returns true if the chain has the word' do
+      expect(subject.has?(prev_word)).to be_truthy
+    end
+
+    it 'returns false if the chain does not have the word' do
+      expect(subject.has?('c')).to be_falsey
+    end
+  end
+
+  describe '#random' do
+    it 'calls adapters get_random_key' do
+      expect(adapter).to receive(:get_random_key)
+      subject.random
+    end
+  end
 end

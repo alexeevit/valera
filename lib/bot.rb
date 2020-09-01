@@ -3,9 +3,7 @@ require_relative 'valera'
 require 'telegram/bot'
 
 class Bot
-  attr_reader :options
-  attr_reader :chain
-  attr_reader :builder
+  attr_reader :options, :chain, :builder, :generator
 
   def initialize(options)
     @options = options
@@ -16,6 +14,7 @@ class Bot
     redis_adapter = Valera::Adapters::Redis.new(url: options[:redis_url])
     @chain = Valera::Chain.new(redis_adapter)
     @builder = Valera::ChainBuilder.new(chain)
+    @generator = Valera::Generator.new(chain)
   end
 
   def run!
@@ -119,6 +118,10 @@ class Bot
           case message.text
           when /хуйня/i
             bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: 'А может это ты хуйня?')
+          when '/generate'
+            sentence_size = rand(10) + 3
+            generated_text = generator.get(sentence_size)
+            bot.api.send_message(chat_id: message.chat.id, text: generated_text)
           when '/stats'
             stats = builder.stats
             stats_text = "Количество пар: #{stats[:pairs_count]}\nКоличество переходов: #{stats[:transitions_count]}"

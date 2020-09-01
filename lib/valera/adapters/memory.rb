@@ -17,6 +17,10 @@ module Valera
         data[prev_word] = matrix
       end
 
+      def get_random_key
+        data.keys.sample
+      end
+
       def purge
         @data = {}
         true
