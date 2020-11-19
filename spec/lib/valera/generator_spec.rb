@@ -1,5 +1,6 @@
 require 'valera/generator'
 require 'valera/chain'
+require 'valera/parser'
 require 'valera/chain_builder'
 require 'valera/adapters/memory'
 

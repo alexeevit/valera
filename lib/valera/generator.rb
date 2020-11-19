@@ -17,6 +17,7 @@ module Valera
 
         rand_index = rand(100)
         progressive_frequency = 0
+
         next_word, _ = next_node.find do |word, node|
           progressive_frequency += node['frequency'].to_i
           progressive_frequency >= rand_index
