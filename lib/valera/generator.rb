@@ -10,15 +10,21 @@ module Valera
       if !first_word || !chain.has?(first_word)
         first_word = select_next(chain.get('^'))
       end
+      return unless first_word
 
       sentence << first_word
 
       loop do
         prev_word = sentence[-1]
+        puts prev_word
 
         if prev_word.match?(Parser.sentence_ending_regex)
-          sentence << select_next(chain.get('^'))
-          next
+          if sentence.size >= words_count
+            break
+          else
+            sentence << select_next(chain.get('^'))
+            next
+          end
         end
 
         if sentence.size >= words_count - 1
@@ -33,7 +39,7 @@ module Valera
         sentence << get_to_continue(prev_word)
       end
 
-      sentence.compact.join(' ').gsub(/\s(#{Parser.sentence_ending_regex})/, '\1')
+      sentence.compact.join(' ').gsub(/\s(#{Parser.sentence_ending_regex})/, '\1').gsub('$', '')
     end
 
     private
