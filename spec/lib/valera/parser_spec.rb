@@ -4,48 +4,88 @@ describe Valera::Parser do
   subject { described_class.new }
 
   describe '#parse' do
-    it 'returns array of prepared words splitted by space' do
-      expect(subject.parse("Hi! How are you?")).to eq(%w(Hi How are you))
+    it 'returns array of arrays of prepared words splitted by space' do
+      expect(subject.parse("Hi! How are you? Hey, hello!")).to eq([%w(Hi !), %w(How are you ?), %w(Hey , hello !)])
     end
   end
 
-  describe '#is_word?' do
-    it 'is true if it contains only latin letters' do
-      expect(subject.send(:is_word?, 'hello')).to be_truthy
+  describe '#split_into_words' do
+    let(:words) { subject.send(:split_into_words, text) }
+
+    context 'when has an ending punctuation' do
+      let(:text) { 'Hello world!' }
+
+      it 'returns words with a separate punctuation' do
+        expect(words).to eq(%w(Hello world !))
+      end
     end
 
-    it 'is true if it contains only cyrrillic letters' do
-      expect(subject.send(:is_word?, 'привет')).to be_truthy
+    context 'when does not have an ending punctuation' do
+      let(:text) { 'Hello world' }
+
+      it 'returns words without punctuation' do
+        expect(words).to eq(%w(Hello world))
+      end
     end
 
-    it 'is true if it contains only digits' do
-      expect(subject.send(:is_word?, '007')).to be_truthy
+    context 'when has an ending punctuation in the middle' do
+      let(:text) { 'Hi! How are you?' }
+
+      it 'returns words with a punctuation' do
+        expect(words).to eq(%w(Hi ! How are you ?))
+      end
     end
 
-    it 'is true if it contains latin, cyrrillic letters and digits' do
-      expect(subject.send(:is_word?, 'Dжаzz01')).to be_truthy
+    context 'when has other punctuation' do
+      let(:text) { 'Hi, hey, hello' }
+
+      it 'returns words with a separate punctuations' do
+        expect(words).to eq(%w(Hi , hey , hello))
+      end
     end
 
-    it 'is true if it contains dash' do
-      expect(subject.send(:is_word?, 'Мамин-Сибиряк')).to be_truthy
+    context 'when has no spaces around punctuation' do
+      let(:text) { 'Hi,hey,hello!' }
+
+      it 'returns words with a separate punctuations' do
+        expect(words).to eq(%w(Hi , hey , hello !))
+      end
     end
 
-    it 'is true if it contains percent' do
-      expect(subject.send(:is_word?, '10%')).to be_truthy
-    end
+    context 'when only punctuation' do
+      let(:text) { '!' }
 
-    it 'is false if it contains other characters' do
-      expect(subject.send(:is_word?, '?')).to be_falsey
+      it 'returns a punctuation' do
+        expect(words).to eq(%w(!))
+      end
     end
   end
 
-  describe '#prepare_word' do
-    it 'removes spaces' do
-      expect(subject.send(:prepare_word, '   henlo ')).to eq('henlo')
+  describe '#split_into_sentences' do
+    let(:sentences) { subject.send(:split_into_sentences, text) }
+
+    context 'when multiple sentences' do
+      let(:text) { 'Hi! How are you?' }
+
+      it 'returns sentences' do
+        expect(sentences).to eq(['Hi!', 'How are you?'])
+      end
     end
 
-    it 'removes special characters' do
-      expect(subject.send(:prepare_word, 'henlo.,"\'?!;:*')).to eq('henlo')
+    context 'when a single sentence' do
+      let(:text) { 'How are you?' }
+
+      it 'returns the sentence' do
+        expect(sentences).to eq(['How are you?'])
+      end
+    end
+
+    context 'when a single sentence without ending punctuation' do
+      let(:text) { 'Hello world' }
+
+      it 'returns the sentence' do
+        expect(sentences).to eq(['Hello world'])
+      end
     end
   end
 end

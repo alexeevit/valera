@@ -50,6 +50,8 @@ module Valera
 
       transitions_sum = transitions.values.sum { |data| data['transitions'] }
       transitions.each { |_, data| data['frequency'] = data['transitions'] * 100 / transitions_sum  }
+      transitions[transitions.keys.last]['frequency'] += 100 - transitions.values.sum { |data| data['frequency'] }
+      transitions
     end
   end
 end

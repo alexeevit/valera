@@ -6,11 +6,17 @@ module Valera
     end
 
     def add(text)
-      words = parser.parse(text)
-      previous = nil
-      words.each do |word|
-        chain.add(previous, word) if previous
-        previous = word
+      sentences = parser.parse(text)
+      sentences.each do |words|
+        return if words.empty?
+
+        previous = '^'
+        words.each do |word|
+          safe_word = word.downcase
+          chain.add(previous, safe_word) if previous
+          previous = safe_word
+        end
+        chain.add(previous, '$') unless previous.match?(Parser.sentence_ending_regex)
       end
     end
 
