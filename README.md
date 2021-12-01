@@ -1,4 +1,4 @@
-# - Zdarov, That's Valera
+# - Zdarov, this is Valera
 
 I came here to punch you in your face and take your money.
 Don't be afraid of me, approach a little closer.
