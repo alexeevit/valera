@@ -4,19 +4,15 @@ module Valera
       @chain = chain
     end
 
-    def get(words_count, first_word = nil)
+    def get(words_count)
       sentence = []
 
-      if !first_word || !chain.has?(first_word)
-        first_word = select_next(chain.get('^'))
-      end
+      first_word = select_next(chain.get('^'))
       return unless first_word
-
       sentence << first_word
 
       loop do
         prev_word = sentence[-1]
-        puts prev_word
 
         if prev_word.match?(Parser.sentence_ending_regex)
           if sentence.size >= words_count

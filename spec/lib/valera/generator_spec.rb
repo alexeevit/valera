@@ -32,30 +32,12 @@ describe Valera::Generator do
         builder.add('It is a first sentence!')
       end
 
-      context 'when the initial word is specified' do
-        it 'starts with the specified word' do
-          expect(subject.get(5, 'first')).to start_with('first')
-        end
+      let(:words) { subject.get(5).split(' ') }
 
-        it 'gets next word from the chain and finishes the sentence' do
-          expect(subject.get(2, 'a')).to eq('a first sentence!')
-        end
-      end
-
-      context 'when the initial word is not present' do
-        it 'starts with a random initial word' do
-          expect(subject.get(5, 'wrong')).to be_kind_of(String)
-        end
-      end
-
-      context 'when the initial word is not specified' do
-        let(:words) { subject.get(5).split(' ') }
-
-        it 'still generates a string of n words with a random initial word' do
-          expect(words.first).to eq('it')
-          expect(%w(it is a first sentence)).to include(words.first.downcase)
-          expect(words.size).to be >= 5
-        end
+      it 'still generates a string of n words with a random initial word' do
+        expect(words.first).to eq('it')
+        expect(%w(it is a first sentence)).to include(words.first.downcase)
+        expect(words.size).to be >= 5
       end
     end
   end
