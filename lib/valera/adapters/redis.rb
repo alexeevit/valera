@@ -4,7 +4,7 @@ require 'redis'
 module Valera
   module Adapters
     class Redis
-      def initialize(connection_params={})
+      def initialize(connection_params = {})
         @client = build_client(connection_params)
       end
 
