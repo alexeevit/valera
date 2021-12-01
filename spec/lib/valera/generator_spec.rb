@@ -42,11 +42,11 @@ describe Valera::Generator do
     end
   end
 
-  describe '#get_to_start' do
+  describe '#get_to_start_sentence' do
     before { builder.add('It is a first sentence! And a horse!') }
 
     it 'returns some word to start the sentence' do
-      expect(%w(it and)).to include(subject.send(:get_to_start))
+      expect(%w(it and)).to include(subject.send(:get_to_start_sentence))
     end
   end
 
@@ -74,35 +74,6 @@ describe Valera::Generator do
 
       it 'returns nil' do
         expect(subject.send(:get_to_continue, prev_word)).to be_nil
-      end
-    end
-  end
-
-  describe '#get_with_ending' do
-    before { builder.add('It is a first sentence! And the first try was ok') }
-
-    context 'when the word has ending next words' do
-      let(:prev_word) { 'a' }
-
-      it 'returns ending word' do
-        expect(subject.send(:get_with_ending, 'first')).to eq(['sentence', '!'])
-        expect(subject.send(:get_with_ending, 'was')).to eq(['ok'])
-      end
-    end
-
-    context 'when the words does not have ending next words' do
-      let(:prev_word) { 'and' }
-
-      it 'returns nil' do
-        expect(subject.send(:get_with_ending, prev_word)).to be_nil
-      end
-    end
-
-    context 'when the word does not have next words' do
-      let(:prev_word) { 'ok' }
-
-      it 'returns nil' do
-        expect(subject.send(:get_with_ending, prev_word)).to be_nil
       end
     end
   end

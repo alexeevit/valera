@@ -5,44 +5,36 @@ module Valera
     end
 
     def get(words_count)
-      sentence = []
+      phrase = []
 
-      first_word = select_next(chain.get('^'))
+      # start the phrase with a new sentence
+      first_word = get_to_start_sentence
       return unless first_word
-      sentence << first_word
+      phrase << first_word
 
+      # continue the phrase
       loop do
-        prev_word = sentence[-1]
+        break if phrase.size >= words_count
 
-        if prev_word.match?(Parser.sentence_ending_regex)
-          if sentence.size >= words_count
-            break
-          else
-            sentence << select_next(chain.get('^'))
-            next
-          end
+        # if a sentence is ended, start a new one
+        prev_word = phrase[-1]
+        if word_is_ending?(prev_word)
+          phrase << get_to_start_sentence
+          next
         end
 
-        if sentence.size >= words_count - 1
-          ending = get_with_ending(prev_word)
-
-          if ending
-            sentence << ending
-            break
-          end
-        end
-
-        sentence << get_to_continue(prev_word)
+        # just next word
+        phrase << get_to_continue(prev_word)
       end
 
-      sentence.compact.join(' ').gsub(/\s(#{Parser.sentence_ending_regex})/, '\1').gsub('$', '')
+      phrase.compact.join(' ').gsub(/\s*(#{Parser.sentence_ending_regex})/, '\1').gsub('$', '')
     end
 
     private
 
     attr_reader :chain
 
-    def get_to_start
+    def get_to_start_sentence
       select_next(chain.get('^'))
     end
 
@@ -57,25 +49,6 @@ module Valera
       end
 
       select_next(paths)
-    end
-
-    def get_with_ending(word)
-      safe_word = word.downcase
-
-      paths = chain.get(safe_word)
-      paths = paths.select { |word, _| chain.get(word).any? { |w, _| w.match?(Parser.sentence_ending_regex) } }
-      paths = calculate_frequencies(paths)
-      return if paths.empty?
-
-      word = select_next(paths)
-
-      endings = chain.get(word)
-      endings = endings.select { |v, _| v.match?(Parser.sentence_ending_regex) }
-      endings = calculate_frequencies(endings)
-
-      ending = select_next(endings)
-      return [word] if ending == '$'
-      [word, ending]
     end
 
     def calculate_frequencies(transitions)
@@ -95,6 +68,10 @@ module Valera
       end
 
       word
+    end
+
+    def word_is_ending?(word)
+      word.match?(Parser.sentence_ending_regex)
     end
   end
 end
