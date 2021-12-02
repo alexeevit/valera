@@ -4,6 +4,10 @@ module Valera
       /#{sentence_ending_regex}|#{other_punctuation_regex}/
     end
 
+    def self.punctuation_marks_without_leading_space
+      /[\,\;\:]|#{sentence_ending_regex}/
+    end
+
     def self.sentence_ending_regex
       /[\.\?\!\$]/
     end
