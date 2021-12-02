@@ -11,7 +11,7 @@ module Valera
       def get_all(chat_id)
         client.hgetall("markov_chain:#{chat_id}").tap do |data|
           data.each do |k, v|
-            data[k] = JSON.parse(v)
+            data[k] = serialize_matrix(v)
           end
         end
       end
@@ -19,7 +19,7 @@ module Valera
       def get(chat_id, prev_word)
         str = client.hget("markov_chain:#{chat_id}", prev_word)
         return {} if str.nil? || str.empty?
-        JSON.parse(str)
+        serialize_matrix(str)
       end
 
       def save(chat_id, prev_word, matrix)
@@ -40,6 +40,13 @@ module Valera
 
       def build_client(params)
         ::Redis.new(params)
+      end
+
+      def serialize_matrix(matrix)
+        data = JSON.parse(matrix)
+        data.each do |k, v|
+          v['frequency'] = BigDecimal(String(v['frequency']))
+        end
       end
     end
   end

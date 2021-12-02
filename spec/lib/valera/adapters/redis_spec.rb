@@ -9,11 +9,11 @@ describe Valera::Adapters::Redis do
     {
       'hello' => {
         'transitions' => 1,
-        'frequency' => 50,
+        'frequency' => 45.5,
       },
       'world' => {
         'transitions' => 1,
-        'frequency' => 50,
+        'frequency' => 50.5,
       },
     }
   end
@@ -30,6 +30,12 @@ describe Valera::Adapters::Redis do
       adapter.save(chat_id, '^', matrix)
       expect(raw_redis.hget("markov_chain:#{chat_id}", '^')).to eq(matrix.to_json)
     end
+
+    it 'stores fractional numbers' do
+      adapter.save(chat_id, '^', matrix)
+      data = JSON.parse(raw_redis.hget("markov_chain:#{chat_id}", '^'))
+      expect(data.dig('hello', 'frequency')).to eq(45.5)
+    end
   end
 
   describe '#get_all' do
@@ -41,6 +47,12 @@ describe Valera::Adapters::Redis do
 
       it 'returns all keys with matrices' do
         expect(adapter.get_all(chat_id)).to match('first' => matrix, 'second' => matrix)
+      end
+
+      it 'returns matrix frequency as BigDecimal' do
+        frequency = adapter.get_all(chat_id).dig('first', 'hello', 'frequency')
+        expect(frequency).to be_an_instance_of(BigDecimal)
+        expect(frequency).to eq(BigDecimal('45.5'))
       end
     end
 
@@ -57,6 +69,12 @@ describe Valera::Adapters::Redis do
 
       it 'returns the matrix' do
         expect(adapter.get(chat_id, '^')).to eq(matrix)
+      end
+
+      it 'returns hash with frequency as BigDecimal' do
+        frequency = adapter.get(chat_id, '^').dig('hello', 'frequency')
+        expect(frequency).to be_an_instance_of(BigDecimal)
+        expect(frequency).to eq(BigDecimal('45.5'))
       end
     end
 

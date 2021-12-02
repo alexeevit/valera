@@ -23,9 +23,9 @@ describe Valera::ChainBuilder do
         builder.add('Hello world! My name is Valera! And you')
         expect(chain.get_all).to eq({
           '^' => {
-            'hello' => { 'transitions' => 1, 'frequency' => 33 },
-            'my' => { 'transitions' => 1, 'frequency' => 33 },
-            'and' => { 'transitions' => 1, 'frequency' => 33 },
+            'hello' => { 'transitions' => 1, 'frequency' => BigDecimal(100) / 3 },
+            'my' => { 'transitions' => 1, 'frequency' => BigDecimal(100) / 3 },
+            'and' => { 'transitions' => 1, 'frequency' => BigDecimal(100) / 3 },
           },
           'hello' => { 'world' => { 'transitions' => 1, 'frequency' => 100 } },
           'world' => { '!' => { 'transitions' => 1, 'frequency' => 100 } },
