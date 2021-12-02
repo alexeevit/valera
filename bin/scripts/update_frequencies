@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require_relative '../../boot'
+
+options = {}
+chat_namespace_help = "the chat namespace (example: telegram:123456)"
+redis_url_help = "the Redis instance URL (default: $REDIS_URL)"
+
+op = OptionParser.new
+op.banner = "Valera chatty bot frequencies updater."
+op.separator ""
+op.separator "Usage: valera [options]"
+op.separator ""
+
+op.separator "Process options:"
+op.on("-c", "--chat-namespace CHAT_NAMESPACE", chat_namespace_help) { |value| options[:chat_namespace] = value }
+op.on("-r", "--redis-url REDIS_URL", redis_url_help) { |value| options[:redis_url] = value }
+
+op.parse!(ARGV)
+
+redis_adapter = Valera::Adapters::Redis.new(url: options.fetch(:redis_url))
+chain = Valera::Chain.new(redis_adapter, options.fetch(:chat_namespace))
+
+chain.each do |word, transitions|
+  new_data = chain.send(:set_transitions, transitions)
+  redis_adapter.save(options.fetch(:chat_namespace), word, new_data)
+end

@@ -51,9 +51,13 @@ module Valera
       transitions[next_word] ||= { 'transitions' => 0 }
       transitions[next_word]['transitions'] += count
 
+      set_frequencies(transitions)
+      transitions
+    end
+
+    def set_frequencies(transitions)
       transitions_sum = transitions.values.sum { |data| data['transitions'] }
       transitions.each { |_, data| data['frequency'] = BigDecimal(data['transitions'] * 100) / transitions_sum }
-      transitions
     end
   end
 end
