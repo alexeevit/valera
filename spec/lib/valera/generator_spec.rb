@@ -44,13 +44,13 @@ describe Valera::Generator do
 
     context 'when chain includes punctuation marks' do
       before do
-        builder.add('Hey, are you - ok?')
+        builder.add('Hey, is front-end - ok?')
       end
 
       subject(:sentence) { generator.get(7) }
 
       it 'removes spaces before punctuation marks' do
-        expect(sentence).to eq('hey, are you - ok?')
+        expect(sentence).to eq('hey, is front-end - ok?')
       end
     end
   end

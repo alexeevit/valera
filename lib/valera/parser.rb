@@ -1,7 +1,7 @@
 module Valera
   class Parser
     def self.all_punctuation_regex
-      /#{sentence_ending_regex}|#{other_punctuation_regex}/
+      /#{punctuation_marks_without_leading_space}|#{sentence_ending_regex}|#{other_punctuation_regex}/
     end
 
     def self.punctuation_marks_without_leading_space
@@ -13,7 +13,7 @@ module Valera
     end
 
     def self.other_punctuation_regex
-      /[,;:\-\-\–]/
+      /\s[\-\-\–]\s/
     end
 
     def parse(text)
