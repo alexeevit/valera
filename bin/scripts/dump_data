@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require_relative '../../boot'
+
+options = {}
+chat_namespace_help = "the chat namespace (example: telegram:123456)"
+output_help = "the output filename (default: valera_dump_%timestamp%.log)"
+redis_url_help = "the Redis instance URL (default: $REDIS_URL)"
+
+op = OptionParser.new
+op.banner = "Valera chatty bot."
+op.separator ""
+op.separator "Usage: valera [options]"
+op.separator ""
+
+op.separator "Process options:"
+op.on("-c", "--chat-namespace", chat_namespace_help) { |value| options[:chat_namespace] = value }
+op.on("-o", "--output", output_help) { |value| options[:output] = value }
+op.on("-r", "--redis-url", redis_url_help) { |value| options[:redis_url] = value }
+
+op.parse!(ARGV)
+
+options[:output] ||= "valera_dump_#{Time.now.to_i}.log"
+options[:redis_url] ||= ENV['REDIS_URL']
+
+redis_adapter = Valera::Adapters::Redis.new(url: options.fetch(:redis_url))
+chain = Valera::Chain.new(redis_adapter, options.fetch(:chat_namespace))
+data = chain.get_all.to_json
+
+file = File.open(options.fetch(:output), 'w+')
+file.write(data)
