@@ -111,6 +111,7 @@ class Bot
   def run_telegram_bot
     Telegram::Bot::Client.run(options[:telegram_token]) do |bot|
       bot.listen do |message|
+        next unless message
         chain = Valera::Chain.new(redis_adapter, "telegram:#{message.chat.id}")
         builder = Valera::ChainBuilder.new(chain)
 
