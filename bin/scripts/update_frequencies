@@ -22,7 +22,7 @@ op.parse!(ARGV)
 redis_adapter = Valera::Adapters::Redis.new(url: options.fetch(:redis_url))
 chain = Valera::Chain.new(redis_adapter, options.fetch(:chat_namespace))
 
-chain.each do |word, transitions|
-  new_data = chain.send(:set_transitions, transitions)
+chain.get_all.each do |word, transitions|
+  new_data = chain.send(:set_frequencies, transitions)
   redis_adapter.save(options.fetch(:chat_namespace), word, new_data)
 end
