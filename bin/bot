@@ -45,15 +45,7 @@ op.separator ""
 
 op.parse!(ARGV)
 
-error_logger = Logger.new(File.open('log/error.log', 'a'))
-
 options[:telegram_token] = ENV['TELEGRAM_API_TOKEN']
 options[:redis_url] = ENV['REDIS_URL']
 
-begin
-  Bot.new(options).run!
-rescue => e
-  error_logger.error(e.message)
-  error_logger.error("Backtrace:\n#{e.backtrace.join("\n")}")
-  raise
-end
+Bot.new(options).run!
