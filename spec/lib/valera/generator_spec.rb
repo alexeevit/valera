@@ -5,7 +5,7 @@ require 'valera/chain_builder'
 require 'valera/adapters/memory'
 
 describe Valera::Generator do
-  subject { described_class.new(chain) }
+  subject(:generator) { described_class.new(chain) }
   let(:chain) { Valera::Chain.new(adapter, chat_id) }
   let(:chat_id) { '123456' }
   let(:adapter) { Valera::Adapters::Memory.new }
@@ -14,7 +14,7 @@ describe Valera::Generator do
   describe '#get' do
     context 'when chain is empty' do
       it 'returns nil' do
-        expect(subject.get(5)).to be_nil
+        expect(generator.get(5)).to be_nil
       end
     end
 
@@ -24,7 +24,7 @@ describe Valera::Generator do
       end
 
       it 'returns the word n times' do
-        expect(subject.get(5)).to eq('hi hi hi')
+        expect(generator.get(5)).to eq('hi hi hi')
       end
     end
 
@@ -33,12 +33,24 @@ describe Valera::Generator do
         builder.add('It is a first sentence!')
       end
 
-      let(:words) { subject.get(5).split(' ') }
+      subject(:sentence) { generator.get(5) }
+      let(:words) { sentence.split(' ') }
 
-      it 'still generates a string of n words with a random initial word' do
+      it 'still generates a string of n words with an initial word' do
         expect(words.first).to eq('it')
-        expect(%w(it is a first sentence)).to include(words.first.downcase)
-        expect(words.size).to be >= 5
+        expect(sentence).to eq('it is a first sentence')
+      end
+    end
+
+    context 'when chain includes punctuation marks' do
+      before do
+        builder.add('Hey, are you ok?')
+      end
+
+      subject(:sentence) { generator.get(6) }
+
+      it 'removes spaces before punctuation marks' do
+        expect(sentence).to eq('hey, are you ok?')
       end
     end
   end
@@ -47,7 +59,7 @@ describe Valera::Generator do
     before { builder.add('It is a first sentence! And a horse!') }
 
     it 'returns some word to start the sentence' do
-      expect(%w(it and)).to include(subject.send(:get_to_start_sentence))
+      expect(%w(it and)).to include(generator.send(:get_to_start_sentence))
     end
   end
 
@@ -58,7 +70,7 @@ describe Valera::Generator do
       let(:prev_word) { 'a' }
 
       it 'returns a continuing word' do
-        expect(subject.send(:get_to_continue, prev_word)).to eq('first')
+        expect(generator.send(:get_to_continue, prev_word)).to eq('first')
       end
     end
 
@@ -66,7 +78,7 @@ describe Valera::Generator do
       let(:prev_word) { 'first' }
 
       it 'returns an ending word' do
-        expect(subject.send(:get_to_continue, prev_word)).to eq('sentence')
+        expect(generator.send(:get_to_continue, prev_word)).to eq('sentence')
       end
     end
 
@@ -74,7 +86,7 @@ describe Valera::Generator do
       let(:prev_word) { '!' }
 
       it 'returns nil' do
-        expect(subject.send(:get_to_continue, prev_word)).to be_nil
+        expect(generator.send(:get_to_continue, prev_word)).to be_nil
       end
     end
   end
@@ -100,14 +112,14 @@ describe Valera::Generator do
     }
 
     it 'selects correct word' do
-      expect(subject.send(:select_next, transitions, 20)).to eq('a')
-      expect(subject.send(:select_next, transitions, 90)).to eq('b')
-      expect(subject.send(:select_next, transitions, 91)).to eq('c')
+      expect(generator.send(:select_next, transitions, 20)).to eq('a')
+      expect(generator.send(:select_next, transitions, 90)).to eq('b')
+      expect(generator.send(:select_next, transitions, 91)).to eq('c')
     end
 
     context 'when there are no transitions' do
       it 'returns nil' do
-        expect(subject.send(:select_next, {})).to be_nil
+        expect(generator.send(:select_next, {})).to be_nil
       end
     end
   end
@@ -142,7 +154,7 @@ describe Valera::Generator do
     }
 
     it 'returns a new hash with new frequencies' do
-      expect(subject.send(:calculate_frequencies, original)).to eq(expected)
+      expect(generator.send(:calculate_frequencies, original)).to eq(expected)
     end
   end
 end

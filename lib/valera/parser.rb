@@ -1,7 +1,15 @@
 module Valera
   class Parser
+    def self.all_punctuation_regex
+      /#{sentence_ending_regex}|#{other_punctuation_regex}/
+    end
+
     def self.sentence_ending_regex
       /[\.\?\!\$]/
+    end
+
+    def self.other_punctuation_regex
+      /[,;:\-\-\–]/
     end
 
     def parse(text)
@@ -16,9 +24,7 @@ module Valera
         loop do
           break if word.nil? || word.empty?
 
-          punct_index = word.index(punctuation_regex)
-          punct_index = word.index(sentence_ending_regex) unless punct_index
-
+          punct_index = word.index(all_punctuation_regex)
           unless punct_index
             words << word
             break
@@ -55,16 +61,20 @@ module Valera
       word.match?(sentence_ending_regex)
     end
 
-    def punctuation_regex
-      /[,;:\-\-\–]/
+    def all_punctuation_regex
+      self.class.all_punctuation_regex
     end
 
-    def other_symbols_regex
-      /['"*]/
+    def other_punctuation_regex
+      self.class.other_punctuation_regex
     end
 
     def sentence_ending_regex
       self.class.sentence_ending_regex
+    end
+
+    def other_symbols_regex
+      /['"*]/
     end
   end
 end

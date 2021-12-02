@@ -27,7 +27,7 @@ module Valera
         phrase << get_to_continue(prev_word)
       end
 
-      phrase.compact.join(' ').gsub(/\s*(#{Parser.sentence_ending_regex})/, '\1').gsub('$', '')
+      phrase.compact.join(' ').gsub(/\s*(#{Parser.all_punctuation_regex})/, '\1').gsub('$', '')
     end
 
     private
