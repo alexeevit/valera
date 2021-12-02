@@ -24,7 +24,7 @@ describe Valera::Generator do
       end
 
       it 'returns the word n times' do
-        expect(generator.get(5)).to eq('hi hi hi')
+        expect(generator.get(5)).to eq('hi hi hi hi hi')
       end
     end
 
@@ -47,10 +47,10 @@ describe Valera::Generator do
         builder.add('Hey, is front-end - ok?')
       end
 
-      subject(:sentence) { generator.get(7) }
+      subject(:sentence) { generator.get(6) }
 
       it 'removes spaces before punctuation marks' do
-        expect(sentence).to eq('hey, is front-end - ok?')
+        expect(sentence).to eq('hey, is front-end - ok? hey')
       end
     end
   end
@@ -63,14 +63,14 @@ describe Valera::Generator do
     end
   end
 
-  describe '#get_to_continue' do
+  describe '#get_next' do
     before { builder.add('It is a first sentence! And a horse!') }
 
     context 'when the word has continuing next words' do
       let(:prev_word) { 'a' }
 
       it 'returns a continuing word' do
-        expect(generator.send(:get_to_continue, prev_word)).to eq('first')
+        expect(%w(first horse)).to include(generator.send(:get_next, prev_word))
       end
     end
 
@@ -78,7 +78,7 @@ describe Valera::Generator do
       let(:prev_word) { 'first' }
 
       it 'returns an ending word' do
-        expect(generator.send(:get_to_continue, prev_word)).to eq('sentence')
+        expect(generator.send(:get_next, prev_word)).to eq('sentence')
       end
     end
 
@@ -86,7 +86,7 @@ describe Valera::Generator do
       let(:prev_word) { '!' }
 
       it 'returns nil' do
-        expect(generator.send(:get_to_continue, prev_word)).to be_nil
+        expect(generator.send(:get_next, prev_word)).to be_nil
       end
     end
   end
@@ -94,67 +94,33 @@ describe Valera::Generator do
   describe '#select_next' do
     let(:transitions) {
       {
-        'a' => {
-          'transitions' => 4,
-          'frequency' => 40,
-        },
-
         'b' => {
-          'transitions' => 5,
-          'frequency' => 50,
+          'transitions' => 4,
+          'frequency' => BigDecimal('0.4'),
         },
 
         'c' => {
+          'transitions' => 5,
+          'frequency' => BigDecimal('0.5'),
+        },
+
+        'a' => {
           'transitions' => 1,
-          'frequency' => 10,
+          'frequency' => BigDecimal('0.1'),
         },
       }
     }
 
     it 'selects correct word' do
-      expect(generator.send(:select_next, transitions, 20)).to eq('a')
-      expect(generator.send(:select_next, transitions, 90)).to eq('b')
-      expect(generator.send(:select_next, transitions, 91)).to eq('c')
+      expect(generator.send(:select_next, transitions, BigDecimal('0.1'))).to eq('a')
+      expect(generator.send(:select_next, transitions, BigDecimal('0.5'))).to eq('b')
+      expect(generator.send(:select_next, transitions, BigDecimal('0.51'))).to eq('c')
     end
 
     context 'when there are no transitions' do
       it 'returns nil' do
         expect(generator.send(:select_next, {})).to be_nil
       end
-    end
-  end
-
-  describe '#calculate_frequencies' do
-    let(:original) {
-      {
-        'a' => {
-          'transitions' => 4,
-          'frequency' => 40,
-        },
-
-        'b' => {
-          'transitions' => 5,
-          'frequency' => 50,
-        },
-      }
-    }
-
-    let(:expected) {
-      {
-        'a' => {
-          'transitions' => 4,
-          'frequency' => 44,
-        },
-
-        'b' => {
-          'transitions' => 5,
-          'frequency' => 56,
-        },
-      }
-    }
-
-    it 'returns a new hash with new frequencies' do
-      expect(generator.send(:calculate_frequencies, original)).to eq(expected)
     end
   end
 end

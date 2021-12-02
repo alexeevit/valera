@@ -16,7 +16,7 @@ describe Valera::Chain do
       expect(subject.get(prev_word)).to eq({
         next_word => {
           'transitions' => 1,
-          'frequency' => 100,
+          'frequency' => 1,
         }
       })
     end
@@ -36,7 +36,7 @@ describe Valera::Chain do
       it 'returns new transition' do
         expect(subject.add(prev_word, next_word)).to eq({
           'transitions' => 1,
-          'frequency' => 100,
+          'frequency' => 1,
         })
       end
 
@@ -45,7 +45,7 @@ describe Valera::Chain do
         expect(subject.get(prev_word)).to eq({
           next_word => {
             'transitions' => 1,
-            'frequency' => 100,
+            'frequency' => 1,
           }
         })
       end
@@ -58,7 +58,7 @@ describe Valera::Chain do
         expect(subject.get(prev_word)).to eq({
           'c' => {
             'transitions' => 1,
-            'frequency' => 100,
+            'frequency' => 1,
           }
         })
 
@@ -67,11 +67,11 @@ describe Valera::Chain do
         expect(subject.get(prev_word)).to eq({
           'c' => {
             'transitions' => 1,
-            'frequency' => 50,
+            'frequency' => BigDecimal('0.5'),
           },
           next_word => {
             'transitions' => 1,
-            'frequency' => 50,
+            'frequency' => BigDecimal('0.5'),
           }
         })
       end

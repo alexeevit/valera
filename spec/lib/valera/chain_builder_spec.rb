@@ -23,18 +23,18 @@ describe Valera::ChainBuilder do
         builder.add('Hello world! My name is Valera! And you')
         expect(chain.get_all).to eq({
           '^' => {
-            'hello' => { 'transitions' => 1, 'frequency' => BigDecimal(100) / 3 },
-            'my' => { 'transitions' => 1, 'frequency' => BigDecimal(100) / 3 },
-            'and' => { 'transitions' => 1, 'frequency' => BigDecimal(100) / 3 },
+            'hello' => { 'transitions' => 1, 'frequency' => BigDecimal(1) / 3 },
+            'my' => { 'transitions' => 1, 'frequency' => BigDecimal(1) / 3 },
+            'and' => { 'transitions' => 1, 'frequency' => BigDecimal(1) / 3 },
           },
-          'hello' => { 'world' => { 'transitions' => 1, 'frequency' => 100 } },
-          'world' => { '!' => { 'transitions' => 1, 'frequency' => 100 } },
-          'my' => { 'name' => { 'transitions' => 1, 'frequency' => 100 } },
-          'name' => { 'is' => { 'transitions' => 1, 'frequency' => 100 } },
-          'is' => { 'valera' => { 'transitions' => 1, 'frequency' => 100 } },
-          'valera' => { '!' => { 'transitions' => 1, 'frequency' => 100 } },
-          'and' => { 'you' => { 'transitions' => 1, 'frequency' => 100 } },
-          'you' => { '$' => { 'transitions' => 1, 'frequency' => 100 } },
+          'hello' => { 'world' => { 'transitions' => 1, 'frequency' => 1 } },
+          'world' => { '!' => { 'transitions' => 1, 'frequency' => 1 } },
+          'my' => { 'name' => { 'transitions' => 1, 'frequency' => 1 } },
+          'name' => { 'is' => { 'transitions' => 1, 'frequency' => 1 } },
+          'is' => { 'valera' => { 'transitions' => 1, 'frequency' => 1 } },
+          'valera' => { '!' => { 'transitions' => 1, 'frequency' => 1 } },
+          'and' => { 'you' => { 'transitions' => 1, 'frequency' => 1 } },
+          'you' => { '$' => { 'transitions' => 1, 'frequency' => 1 } },
         })
       end
     end
@@ -49,30 +49,30 @@ describe Valera::ChainBuilder do
 
         expect(chain.get_all).to match(
           '^' => {
-            'hello' => { 'transitions' => 2, 'frequency' => 50 },
-            'my' => { 'transitions' => 1, 'frequency' => 25 },
-            'and' => { 'transitions' => 1, 'frequency' => 25 },
+            'hello' => { 'transitions' => 2, 'frequency' => BigDecimal('0.5') },
+            'my' => { 'transitions' => 1, 'frequency' => BigDecimal('0.25') },
+            'and' => { 'transitions' => 1, 'frequency' => BigDecimal('0.25') },
           },
           'hello' => {
-            'world' => { 'transitions' => 1, 'frequency' => 50 },
-            'valera' => { 'transitions' => 1, 'frequency' => 50 },
+            'world' => { 'transitions' => 1, 'frequency' => BigDecimal('0.5') },
+            'valera' => { 'transitions' => 1, 'frequency' => BigDecimal('0.5') },
           },
-          'world' => { '!' => { 'transitions' => 1, 'frequency' => 100 } },
-          'my' => { 'name' => { 'transitions' => 1, 'frequency' => 100 } },
-          'name' => { 'is' => { 'transitions' => 1, 'frequency' => 100 } },
-          'is' => { 'valera' => { 'transitions' => 1, 'frequency' => 100 } },
+          'world' => { '!' => { 'transitions' => 1, 'frequency' => BigDecimal(1) } },
+          'my' => { 'name' => { 'transitions' => 1, 'frequency' => BigDecimal(1) } },
+          'name' => { 'is' => { 'transitions' => 1, 'frequency' => BigDecimal(1) } },
+          'is' => { 'valera' => { 'transitions' => 1, 'frequency' => BigDecimal(1) } },
           'valera' => {
-            '!' => { 'transitions' => 1, 'frequency' => 50 },
-            ',' => { 'transitions' => 1, 'frequency' => 50 },
+            '!' => { 'transitions' => 1, 'frequency' => BigDecimal('0.5') },
+            ',' => { 'transitions' => 1, 'frequency' => BigDecimal('0.5') },
           },
-          'and' => { 'you' => { 'transitions' => 1, 'frequency' => 100 } },
+          'and' => { 'you' => { 'transitions' => 1, 'frequency' => BigDecimal('1') } },
           'you' => {
-            '$' => { 'transitions' => 1, 'frequency' => 50 },
-            '?' => { 'transitions' => 1, 'frequency' => 50 },
+            '$' => { 'transitions' => 1, 'frequency' => BigDecimal('0.5') },
+            '?' => { 'transitions' => 1, 'frequency' => BigDecimal('0.5') },
           },
-          ',' => { 'how' => { 'transitions' => 1, 'frequency' => 100 } },
-          'how' => { 'are' => { 'transitions' => 1, 'frequency' => 100 } },
-          'are' => { 'you' => { 'transitions' => 1, 'frequency' => 100 } },
+          ',' => { 'how' => { 'transitions' => 1, 'frequency' => BigDecimal(1) } },
+          'how' => { 'are' => { 'transitions' => 1, 'frequency' => BigDecimal(1) } },
+          'are' => { 'you' => { 'transitions' => 1, 'frequency' => BigDecimal(1) } },
         )
       end
     end

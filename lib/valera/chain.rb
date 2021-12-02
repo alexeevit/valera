@@ -57,7 +57,7 @@ module Valera
 
     def set_frequencies(transitions)
       transitions_sum = transitions.values.sum { |data| data['transitions'] }
-      transitions.each { |_, data| data['frequency'] = BigDecimal(data['transitions'] * 100) / transitions_sum }
+      transitions.each { |_, data| data['frequency'] = BigDecimal(data['transitions']) / transitions_sum }
     end
   end
 end
