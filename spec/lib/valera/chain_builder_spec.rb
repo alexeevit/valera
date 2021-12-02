@@ -25,7 +25,7 @@ describe Valera::ChainBuilder do
           '^' => {
             'hello' => { 'transitions' => 1, 'frequency' => 33 },
             'my' => { 'transitions' => 1, 'frequency' => 33 },
-            'and' => { 'transitions' => 1, 'frequency' => 34 },
+            'and' => { 'transitions' => 1, 'frequency' => 33 },
           },
           'hello' => { 'world' => { 'transitions' => 1, 'frequency' => 100 } },
           'world' => { '!' => { 'transitions' => 1, 'frequency' => 100 } },
