@@ -8,32 +8,30 @@ module Valera
         @client = build_client(connection_params)
       end
 
-      def get_all
-        keys = client.keys
-        values = keys.any? ? client.mget(keys) : {}
-        result = {}
-        keys.each.with_index do |key, i|
-          result[key] = JSON.parse(values[i])
+      def get_all(chat_id)
+        client.hgetall("markov_chain:#{chat_id}").tap do |data|
+          data.each do |k, v|
+            data[k] = JSON.parse(v)
+          end
         end
-        result
       end
 
-      def get(prev_word)
-        str = client.get(prev_word)
+      def get(chat_id, prev_word)
+        str = client.hget("markov_chain:#{chat_id}", prev_word)
         return {} if str.nil? || str.empty?
         JSON.parse(str)
       end
 
-      def save(prev_word, matrix)
-        client.set(prev_word, matrix.to_json)
+      def save(chat_id, prev_word, matrix)
+        client.hset("markov_chain:#{chat_id}", prev_word, matrix.to_json)
       end
 
-      def purge
-        client.flushall == "OK"
+      def purge(chat_id)
+        client.del("markov_chain:#{chat_id}")
       end
 
-      def get_random_key
-        client.randomkey
+      def get_random_key(chat_id)
+        client.hkeys("markov_chain:#{chat_id}").sample
       end
 
       private

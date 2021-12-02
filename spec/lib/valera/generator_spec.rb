@@ -6,7 +6,8 @@ require 'valera/adapters/memory'
 
 describe Valera::Generator do
   subject { described_class.new(chain) }
-  let(:chain) { Valera::Chain.new(adapter) }
+  let(:chain) { Valera::Chain.new(adapter, chat_id) }
+  let(:chat_id) { '123456' }
   let(:adapter) { Valera::Adapters::Memory.new }
   let(:builder) { Valera::ChainBuilder.new(chain) }
 

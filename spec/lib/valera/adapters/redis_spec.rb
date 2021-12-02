@@ -27,23 +27,42 @@ describe Valera::Adapters::Redis do
 
   describe '#save' do
     it 'stores the matrix into the hash' do
-      adapter.save('^', matrix)
-      expect(raw_redis.get('^')).to eq(matrix.to_json)
+      adapter.save(chat_id, '^', matrix)
+      expect(raw_redis.hget("markov_chain:#{chat_id}", '^')).to eq(matrix.to_json)
+    end
+  end
+
+  describe '#get_all' do
+    context 'when db is not empty' do
+      before do
+        adapter.save(chat_id, 'first', matrix)
+        adapter.save(chat_id, 'second', matrix)
+      end
+
+      it 'returns all keys with matrices' do
+        expect(adapter.get_all(chat_id)).to match('first' => matrix, 'second' => matrix)
+      end
+    end
+
+    context 'when db is empty' do
+      it 'returns empty hash' do
+        expect(adapter.get_all(chat_id)).to eq({})
+      end
     end
   end
 
   describe '#get' do
     context 'when the initial word exists' do
-      before { adapter.save('^', matrix) }
+      before { adapter.save(chat_id, '^', matrix) }
 
       it 'returns the matrix' do
-        expect(adapter.get('^')).to eq(matrix)
+        expect(adapter.get(chat_id, '^')).to eq(matrix)
       end
     end
 
     context 'when the initial word does not exist' do
       it 'returns empty hash' do
-        expect(adapter.get('^')).to eq({})
+        expect(adapter.get(chat_id, '^')).to eq({})
       end
     end
   end
@@ -51,28 +70,28 @@ describe Valera::Adapters::Redis do
   describe '#get_random_key' do
     context 'when the db is not empty' do
       before do
-        adapter.save('first', matrix)
-        adapter.save('second', matrix)
+        adapter.save(chat_id, 'first', matrix)
+        adapter.save(chat_id, 'second', matrix)
       end
 
       it 'returns a random key' do
-        expect(%w(first second)).to include(adapter.get_random_key)
+        expect(%w(first second)).to include(adapter.get_random_key(chat_id))
       end
     end
 
     context 'when the db is empty' do
       it 'returns nil' do
-        expect(adapter.get_random_key).to be_nil
+        expect(adapter.get_random_key(chat_id)).to be_nil
       end
     end
   end
 
   describe '#purge' do
     it 'flushes the database' do
-      adapter.save('^', matrix)
+      adapter.save(chat_id, '^', matrix)
 
-      expect { adapter.purge }.to(
-        change { raw_redis.get('^') }.from(matrix.to_json).to(nil)
+      expect { adapter.purge(chat_id) }.to(
+        change { raw_redis.hget("markov_chain:#{chat_id}", '^') }.from(matrix.to_json).to(nil)
       )
     end
   end

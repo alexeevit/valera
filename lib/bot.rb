@@ -3,7 +3,7 @@ require_relative 'valera'
 require 'telegram/bot'
 
 class Bot
-  attr_reader :options, :chain, :builder, :generator
+  attr_reader :options, :redis_adapter
 
   def initialize(options)
     @options = options
@@ -11,10 +11,7 @@ class Bot
     options[:logfile] = File.expand_path(logfile) if logfile?
     options[:pidfile] = File.expand_path(pidfile) if pidfile?
 
-    redis_adapter = Valera::Adapters::Redis.new(url: options[:redis_url])
-    @chain = Valera::Chain.new(redis_adapter)
-    @builder = Valera::ChainBuilder.new(chain)
-    @generator = Valera::Generator.new(chain)
+    @redis_adapter = Valera::Adapters::Redis.new(url: options[:redis_url])
   end
 
   def run!
@@ -114,11 +111,15 @@ class Bot
   def run_telegram_bot
     Telegram::Bot::Client.run(options[:telegram_token]) do |bot|
       bot.listen do |message|
+        chain = Valera::Chain.new(redis_adapter, "telegram:#{message.chat.id}")
+        builder = Valera::ChainBuilder.new(chain)
+
         begin
           case message.text
           when /хуйня/i
             bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: 'А может это ты хуйня?')
           when '/generate'
+            generator = Valera::Generator.new(chain)
             sentence_size = rand(30) + 10
             generated_text = generator.get(sentence_size)
             bot.api.send_message(chat_id: message.chat.id, text: generated_text)

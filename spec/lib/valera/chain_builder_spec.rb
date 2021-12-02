@@ -5,7 +5,8 @@ require 'valera/adapters/memory'
 
 describe Valera::ChainBuilder do
   subject { described_class.new(chain) }
-  let(:chain) { Valera::Chain.new(adapter) }
+  let(:chat_id) { '123456' }
+  let(:chain) { Valera::Chain.new(adapter, chat_id) }
   let(:adapter) { Valera::Adapters::Memory.new }
 
   describe '#initialize' do

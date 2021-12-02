@@ -2,7 +2,8 @@ require 'valera/chain'
 require 'valera/adapters/memory'
 
 describe Valera::Chain do
-  subject { described_class.new(adapter) }
+  subject { described_class.new(adapter, chat_id) }
+  let(:chat_id) { '123456' }
   let(:adapter) { Valera::Adapters::Memory.new }
 
   describe '#get' do
