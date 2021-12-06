@@ -24,7 +24,12 @@ class TelegramHandler
             generator = Valera::Generator.new(chain)
             sentence_size = rand(30) + 10
             generated_text = generator.get(sentence_size)
-            bot.api.send_message(chat_id: message.chat.id, text: generated_text)
+
+            if String(generated_text).empty?
+              bot.api.send_message(chat_id: message.chat.id, text: 'Мне нечего вам сказать')
+            else
+              bot.api.send_message(chat_id: message.chat.id, text: generated_text)
+            end
           when '/stats'
             stats = builder.stats
             stats_text = "Количество пар: #{stats[:pairs_count]}\nКоличество переходов: #{stats[:transitions_count]}"
