@@ -23,7 +23,7 @@ class TelegramHandler
         set_chain_and_builder(message)
 
         begin
-          if message.reply_to_message&.from&.username == me['username'] || message.text.match?(me['username'])
+          if message.reply_to_message&.from&.username == me['username'] || message.text&.match?(me['username'])
             bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: generate)
             next
           end
