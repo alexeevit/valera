@@ -1,36 +1,21 @@
 # - Zdarov, this is Valera
 
-I came here to punch you in your face and take your money.
-Don't be afraid of me, approach a little closer.
+I'm a telegram bot with a Markov chain under the hood written in pure Ruby. Simply speaking, you can add me to your chat and I'll listen you guys. If you want me to say something based on the chat, you have 3 options:
 
-Ok, nevermind. Here's my growth plan:
+- Use the command `/generate`
+- Mention me in a message
+- Reply to my message
 
-### Plan
+## Configuration
 
-- [x] To be able to save Markoff chain
-- [x] To be able to listen you guys through Telegram
-- [x] To be able to run like a daemon and deploy via Capistrano
-- [x] To be able to show statistics
-- [ ] To be fully or almost fully covered by specs
-- [ ] To be able to speak based on phrases you guys said
-- [ ] To be able to save distinguish different chats
-- [ ] To be able save your speach to different platforms
-- [ ] To be able to clean some phrases or words from my database
+Use the next environment variables to configure me:
 
-### Step 1. Tests plan
-- [x] Chain
-- [x] Parser
-- [x] Chain builder
+- `REDIS_URL` - a url to the redis instance (example: `redis://localhost:6379/7`). I use redis to store the Markov chains.
+- `TELEGRAM_API_TOKEN` - a token you obtained from the Telegram's BotFather.
+- `APP_ENV` - supported environments: `development`, `production`, `test` (default: `development`).
 
-### Step 1.5. Purge data
-- [x] Add a method to the interface to purge the chain
+## Deploy
 
-### Step 2. Generator
-- [ ] Generator specs
-- [ ] Generator
-- [ ] Send messages to Telegram
+Use the prepared `Capistrano` config files. You only need to define `valera.site` in your `/etc/hosts` and add your ssh public key to the end server. Capistrano will try to deploy the bot into `deploy@valera.site:/var/www/valera`.
 
-### Step 3. Continue tests
-- [ ] Redis adapter
-- [ ] Memory adapter (?)
-- [ ] Bot
+To run the server, use the systemd-service config file `valera.service.example`.
