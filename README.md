@@ -14,6 +14,10 @@ Use the next environment variables to configure me:
 - `TELEGRAM_API_TOKEN` - a token you obtained from the Telegram's BotFather.
 - `APP_ENV` - supported environments: `development`, `production`, `test` (default: `development`).
 
+## Run
+
+To run the bot locally, use the `bin/bot` binary. In the `development` environment (default) you can create the configuration in the `.env` file.
+
 ## Deploy
 
 Use the prepared `Capistrano` config files. You only need to define `valera.site` in your `/etc/hosts` and add your ssh public key to the end server. Capistrano will try to deploy the bot into `deploy@valera.site:/var/www/valera`.
