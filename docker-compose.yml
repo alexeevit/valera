@@ -1,0 +1,17 @@
+services:
+  bot:
+    build: .
+    environment:
+      APP_ENV: development
+      TELEGRAM_API_TOKEN: ${TELEGRAM_API_TOKEN}
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
