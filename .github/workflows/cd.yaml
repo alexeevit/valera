@@ -69,7 +69,7 @@ jobs:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}
           AGE_SECRET_KEY: ${{ secrets.AGE_SECRET_KEY }}
         run: |
-          helm plugin install https://github.com/jkroepke/helm-secrets --version v4.6.2 --verify=false
+          helm plugin install https://github.com/jkroepke/helm-secrets --version v4.6.2
           echo "$KUBECONFIG" > .kubeconfig
           chmod 600 .kubeconfig
           echo "$AGE_SECRET_KEY" > age-key.txt
