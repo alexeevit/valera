@@ -33,7 +33,11 @@ module Valera
               next_sep = ' '
             else
               if token.match?(PUNCTUATION_REGEX)
-                parts[-1] = "#{parts[-1]}#{token}" unless parts.empty?
+                if !parts.empty? && (token == '-' || token == '—')
+                  parts[-1] = "#{parts[-1]} #{token}"
+                elsif !parts.empty?
+                  parts[-1] = "#{parts[-1]}#{token}"
+                end
               else
                 word = capitalize_next ? token.capitalize : token
                 parts << (parts.empty? ? word : "#{next_sep}#{word}")

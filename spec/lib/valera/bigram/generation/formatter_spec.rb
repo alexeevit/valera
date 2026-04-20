@@ -16,6 +16,16 @@ describe Valera::Bigram::Generation::Formatter do
       expect(formatter.call(tokens)).to eq('Hello, world.')
     end
 
+    it 'adds spaces around -' do
+      tokens = ['<s>', 'hello', '-', 'world', '</s>']
+      expect(formatter.call(tokens)).to eq('Hello - world')
+    end
+
+    it 'adds spaces around —' do
+      tokens = ['<s>', 'hello', '—', 'world', '</s>']
+      expect(formatter.call(tokens)).to eq('Hello — world')
+    end
+
     it 'removes <s> and </s> markers' do
       result = formatter.call(['<s>', 'hello', '</s>'])
       expect(result).not_to include('<s>', '</s>')
