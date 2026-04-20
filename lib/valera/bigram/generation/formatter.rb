@@ -9,35 +9,41 @@ module Valera
         end
 
         def call(tokens)
-          words = []
+          parts = []
           capitalize_next = false
+          next_sep = ' '
 
           tokens.each do |token|
             case token
             when '<s>'
               capitalize_next = true
             when '</s>'
-              next
+              next_sep = "\n" if parts.last && !parts.last[-1].match?(/[[:punct:]]/)
             when '<num>'
+              parts << (parts.empty? ? '' : next_sep) + rand(1..9999).to_s
               capitalize_next = false
-              words << rand(1..9999).to_s
+              next_sep = ' '
             when '<url>'
+              parts << (parts.empty? ? '' : next_sep) + Faker::Internet.url
               capitalize_next = false
-              words << Faker::Internet.url
+              next_sep = ' '
             when '<mention>'
+              parts << (parts.empty? ? '' : next_sep) + mention
               capitalize_next = false
-              words << mention
+              next_sep = ' '
             else
               if token.match?(PUNCTUATION_REGEX)
-                words[-1] = "#{words[-1]}#{token}" unless words.empty?
+                parts[-1] = "#{parts[-1]}#{token}" unless parts.empty?
               else
-                words << (capitalize_next ? token.capitalize : token)
+                word = capitalize_next ? token.capitalize : token
+                parts << (parts.empty? ? word : "#{next_sep}#{word}")
                 capitalize_next = false
+                next_sep = ' '
               end
             end
           end
 
-          words.join(' ')
+          parts.join
         end
 
         private

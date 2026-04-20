@@ -8,7 +8,7 @@ describe Valera::Bigram::Generation::Formatter do
 
     it 'handles multiple sentences' do
       tokens = ['<s>', 'hello', '</s>', '<s>', 'bye', '</s>']
-      expect(formatter.call(tokens)).to eq('Hello Bye')
+      expect(formatter.call(tokens)).to eq("Hello\nBye")
     end
 
     it 'attaches punctuation to the preceding word' do
