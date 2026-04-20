@@ -2,7 +2,7 @@ module Valera
   module Bigram
     module Training
       module Tokenizer
-        TOKEN_REGEX        = /<\w+>|[a-zA-Zа-яА-ЯёЁ0-9]+|\n|[^\s]/.freeze
+        TOKEN_REGEX        = /<\w+>|[a-zA-Zа-яА-ЯёЁ0-9-]+|\n|[^\s]/.freeze
         SENTENCE_END_REGEX = /\A[.!?\n]\z/.freeze
 
         module_function

@@ -34,6 +34,10 @@ describe Valera::Bigram::Training::Tokenizer do
       expect(tokenizer.call('hello!')).to eq(['<s>', 'hello', '!', '</s>'])
     end
 
+    it 'keeps hyphenated words as a single token' do
+      expect(tokenizer.call('back-end development')).to eq(['<s>', 'back-end', 'development', '</s>'])
+    end
+
     it 'handles multiple sentences' do
       expect(tokenizer.call('hi! bye')).to eq(['<s>', 'hi', '!', '</s>', '<s>', 'bye', '</s>'])
     end
