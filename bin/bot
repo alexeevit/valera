@@ -4,7 +4,6 @@ require_relative '../boot'
 
 require 'optparse'
 require 'fileutils'
-require 'telegram_handler'
 
 options = {}
 version = "0.0.1"
@@ -56,7 +55,7 @@ class Bot
       token: options[:telegram_token],
       redis_url: options[:redis_url],
     }
-    @telegram_handler = TelegramHandler.new(telegram_options)
+    @telegram_handler = BigramTelegramHandler.new(telegram_options)
   end
 
   def run!

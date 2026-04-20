@@ -12,3 +12,6 @@ require 'rubygems'
 require 'bundler/setup'
 
 Bundler.require(:default, ENV.fetch('APP_ENV'))
+
+require 'valera'
+require 'bigram_telegram_handler'
