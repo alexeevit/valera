@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'telegram-bot-ruby'
 gem 'redis'
+gem 'faker'
 
 group :development, :test do
   gem 'capistrano', '~> 3.14', require: false

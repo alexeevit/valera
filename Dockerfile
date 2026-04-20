@@ -4,7 +4,7 @@ RUN adduser -D app
 WORKDIR /app
 
 RUN gem install bundler -v 1.17.3
-CMD ["ruby", "bin/anobot"]
+CMD ["ruby", "bin/bot"]
 
 FROM base AS development
 RUN apk add --no-cache build-base

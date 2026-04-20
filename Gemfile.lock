@@ -28,6 +28,8 @@ GEM
     dotenv (2.7.6)
     ed25519 (1.2.4)
     equalizer (0.0.11)
+    faker (2.19.0)
+      i18n (>= 1.6, < 2)
     fakeredis (0.8.0)
       redis (~> 4.1)
     faraday (1.0.1)
@@ -83,6 +85,7 @@ DEPENDENCIES
   capistrano-rvm
   dotenv
   ed25519
+  faker
   fakeredis
   pry (~> 0.12.2)
   redis

@@ -16,6 +16,9 @@
 
 require 'pry'
 require 'fakeredis/rspec'
+require_relative '../boot'
+
+ENV['APP_ENV'] ||= 'test'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
