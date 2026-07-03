@@ -18,7 +18,9 @@ class BigramTelegramHandler
 
           Valera::Bigram::Trainer.new(model).call(message.text) if message.text
 
-          if mentioned?(message)
+          if message.text&.match?(/хуйня/i)
+            bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: 'А может это ты хуйня?')
+          elsif mentioned?(message)
             mention = "@#{message.from.username}"
             text = Valera::Bigram::Generator.new(model, mention: mention).call
             text = 'Мне нечего вам сказать' if text.empty?
