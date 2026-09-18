@@ -13,9 +13,7 @@ require_relative 'valera/bigram/trainer'
 require_relative 'valera/bigram/generator'
 
 module Valera
-  LOG_LEVEL = (ENV['LOG_LEVEL'] || :info).freeze
-
   def self.logger
-    @logger ||= Logger.new($stdout, LOG_LEVEL)
+    @logger ||= Logger.new($stdout, ENV.fetch('LOG_LEVEL', Logger::DEFAULT_LEVEL))
   end
 end

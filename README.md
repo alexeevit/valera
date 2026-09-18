@@ -13,6 +13,7 @@ Use the next environment variables to configure me:
 - `REDIS_URL` — the redis instance URL (example: `redis://localhost:6379/7`). I use redis to store the Markov chains.
 - `TELEGRAM_API_TOKEN` — a token you obtained from the Telegram's BotFather.
 - `APP_ENV` — supported environments: `development`, `production`, `test` (default: `development`).
+- `LOG_LEVEL` — `debug`, `info`, `warn`, `error` or `fatal` (default: `info`). Logs are written to stdout as JSON lines and never include message contents or chat ids.
 
 For the `development` environment you can define the variables in the `.env` file.
 

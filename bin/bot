@@ -5,6 +5,9 @@ require_relative '../boot'
 require 'optparse'
 require 'fileutils'
 
+# Flush every line immediately, otherwise buffered logs are lost when the process dies.
+$stdout.sync = $stderr.sync = true
+
 options = {}
 version = "0.0.1"
 daemonize_help = "run daemonized in the background (default: false)"
@@ -69,7 +72,15 @@ class Bot
       suppress_output
     end
 
-    telegram_handler.run!
+    begin
+      telegram_handler.run!
+    rescue SignalException => e
+      Valera.logger.info('bot_stopped', signal: e.signm)
+      raise
+    rescue Exception => e
+      Valera.logger.fatal('bot_crashed', error: e)
+      raise
+    end
   end
 
   private
